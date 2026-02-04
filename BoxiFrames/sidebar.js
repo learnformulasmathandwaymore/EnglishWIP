@@ -1,45 +1,62 @@
 async function loadSidebar() {
-    const response = await fetch(".");
-    const text = await response.text();
+    try {
+        // Fetch the current directory listing (BoxiFrames folder)
+        const response = await fetch(".");
+        const text = await response.text();
 
-    // Parse the directory listing
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(text, "text/html");
+        // Parse the HTML returned by GitHub Pages
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, "text/html");
 
-    // Find all links ending in "iframe.html"
-    const links = [...doc.querySelectorAll("a")]
-        .map(a => a.getAttribute("href"))
-        .filter(href => href && href.endsWith("iframe.html"));
+        // Find all links ending in "iframe.html"
+        const iframeFiles = [...doc.querySelectorAll("a")]
+            .map(a => a.getAttribute("href"))
+            .filter(href =>
+                href &&
+                href.endsWith("iframe.html") &&
+                !href.startsWith("http") // ignore GitHub help link
+            );
 
-    // Convert filenames into display names
-    const games = links.map(file => {
-        const name = file.replace("iframe.html", "");
-        const display = name.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
-        return {
-            name: display,
-            url: file,
-            thumbnail: `../Thumbnails/${name}.png`
-        };
-    });
+        // Convert iframe filenames into sidebar entries
+        const games = iframeFiles.map(file => {
+            const base = file.replace("iframe.html", ""); // "retrobowliframe" -> "retrobowl"
+            const cleanName = base
+                .replace(/iframe$/i, "") // remove trailing "iframe"
+                .replace(/-/g, " ")      // replace dashes with spaces
+                .replace(/\b\w/g, c => c.toUpperCase()); // capitalize words
 
-    // Shuffle and pick 5
-    const selected = games.sort(() => Math.random() - 0.5).slice(0, 5);
+            return {
+                name: cleanName,
+                url: file,
+                thumbnail: `../Thumbnails/${base}.png`
+            };
+        });
 
-    // Render sidebar
-    const container = document.getElementById("sidebar");
-    container.innerHTML = "";
+        // Shuffle and pick 5 random games
+        const selected = games.sort(() => Math.random() - 0.5).slice(0, 5);
 
-    selected.forEach(game => {
-        const item = document.createElement("div");
-        item.className = "sidebar-item";
+        // Render the sidebar
+        const container = document.getElementById("sidebar");
+        container.innerHTML = "";
 
-        item.innerHTML = `
-            <img src="${game.thumbnail}" onerror="this.style.display='none'">
-            <span>${game.name}</span>
-        `;
+        selected.forEach(game => {
+            const item = document.createElement("div");
+            item.className = "sidebar-item";
 
-        item.onclick = () => window.location.href = game.url;
-        container.appendChild(item);
-    });
+            item.innerHTML = `
+                <img src="${game.thumbnail}" onerror="this.style.display='none'">
+                <span>${game.name}</span>
+            `;
+
+            item.onclick = () => window.location.href = game.url;
+            container.appendChild(item);
+        });
+
+    } catch (err) {
+        console.error("Sidebar load error:", err);
+    }
 }
+
+// Run on page load
+loadSidebar();
 
