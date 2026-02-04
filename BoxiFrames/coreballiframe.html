@@ -1,0 +1,143 @@
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    <title>Noodle Tools Helper Online</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+
+<style>
+    iframe {
+        align-items: center;
+        border: 5px solid black;
+        border-radius: 15px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .CenterColor {
+        text-align: center;
+        color: rgb(89, 205, 243);
+    }
+
+    body {
+        background-color: rgb(8, 112, 182);
+        margin-left: 240px;
+    }
+
+    #BackButton {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 10px auto;
+        padding: 15px 20px;
+        color: white;
+        text-align: center;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        max-width: 200px;
+        width: 100%;
+        background-color: rgb(36, 184, 184);
+    }
+
+    #FullscreenButton {
+        display: block;
+        margin: 15px auto;
+        padding: 10px 20px;
+        background-color: rgb(30, 150, 200);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    #FullscreenButton:hover {
+        background-color: rgb(20, 120, 170);
+    }
+
+    .color {
+        color: rgb(0, 255, 221);
+    }
+
+    #left-sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        width: 220px;
+        height: 100%;
+        background: rgb(5, 70, 120);
+        padding: 15px;
+        overflow-y: auto;
+        border-right: 4px solid black;
+    }
+
+    #left-sidebar h3 {
+        color: white;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .suggested-item {
+        background: rgb(0, 0, 0);
+        color: white;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        text-align: center;
+        cursor: pointer;
+        border: 2px solid rgb(20, 120, 170);
+    }
+
+    .suggested-item:hover {
+        background: rgb(20, 120, 170);
+    }
+
+    .suggested-placeholder {
+        width: 100%;
+        height: 60px;
+        background: black;
+        border-radius: 8px;
+        margin-bottom: 10px;
+    }
+</style>
+
+<body>
+<link rel="stylesheet" href="style.css">
+
+
+<h1 class="CenterColor">Coreball</h1>
+<h2 class="CenterColor">Welcome to the game Coreball.</h2>
+
+<iframe id="gameframe" title="coreball" width="70%" height="65%" src="Games/coreball/"></iframe>
+
+<button id="FullscreenButton">⛶ Fullscreen</button>
+
+<button id="BackButton" onclick="window.location.href='../index.html'">Back to Main Page</button>
+
+<a href="Games/coreball/" target="_blank">
+    <p class="color">Fullscreen or Glitched? click here</p>
+</a>
+
+<script src="sidebar.js"></script>
+
+<script>
+    const iframe = document.getElementById("gameframe");
+    const fsButton = document.getElementById("FullscreenButton");
+
+    fsButton.onclick = () => {
+        if (iframe.requestFullscreen) iframe.requestFullscreen();
+        else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
+        else if (iframe.msRequestFullscreen) iframe.msRequestFullscreen();
+    };
+</script>
+
+</body>
+</html>
+
+</body>
+</html>
