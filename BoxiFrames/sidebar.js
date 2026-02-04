@@ -1,62 +1,45 @@
-async function loadGames() {
-    // Fetch directory listing for Games folder
-    const response = await fetch("Games/");
+async function loadSidebar() {
+    const response = await fetch(".");
     const text = await response.text();
 
+    // Parse the directory listing
     const parser = new DOMParser();
     const doc = parser.parseFromString(text, "text/html");
 
-    const links = [...doc.querySelectorAll("a")];
-    const gameFolders = links
+    // Find all links ending in "iframe.html"
+    const links = [...doc.querySelectorAll("a")]
         .map(a => a.getAttribute("href"))
-        .filter(h => h && h.endsWith("/"))
-        .filter(h => h !== "../");
+        .filter(href => href && href.endsWith("iframe.html"));
 
-    const allGames = gameFolders.map(folder => {
-        const cleanName = folder.replace("/", "");
+    // Convert filenames into display names
+    const games = links.map(file => {
+        const name = file.replace("iframe.html", "");
+        const display = name.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase());
         return {
-            name: cleanName,
-            url: "Games/" + folder,
-            thumbnail: "Thumbnails/" + cleanName + ".png"
+            name: display,
+            url: file,
+            thumbnail: `../Thumbnails/${name}.png`
         };
     });
 
-    function shuffle(arr) {
-        return arr.sort(() => Math.random() - 0.5);
-    }
+    // Shuffle and pick 5
+    const selected = games.sort(() => Math.random() - 0.5).slice(0, 5);
 
-    const picks = shuffle([...allGames]).slice(0, 5);
-    const sidebar = document.getElementById("suggested-list");
+    // Render sidebar
+    const container = document.getElementById("sidebar");
+    container.innerHTML = "";
 
-    for (let game of picks) {
-        const div = document.createElement("div");
-        div.className = "suggested-item";
+    selected.forEach(game => {
+        const item = document.createElement("div");
+        item.className = "sidebar-item";
 
-        const img = document.createElement("img");
-        img.src = game.thumbnail;
-        img.onerror = () => {
-            img.style.display = "none"; // hide broken image
-        };
-        img.className = "thumbnail";
+        item.innerHTML = `
+            <img src="${game.thumbnail}" onerror="this.style.display='none'">
+            <span>${game.name}</span>
+        `;
 
-        const label = document.createElement("div");
-        label.textContent = game.name;
-        label.className = "game-label";
-
-        div.appendChild(img);
-        div.appendChild(label);
-
-        div.onclick = () => window.location.href = game.url;
-
-        sidebar.appendChild(div);
-    }
-
-    // Add placeholders if fewer than 5 games
-    for (let i = picks.length; i < 5; i++) {
-        const placeholder = document.createElement("div");
-        placeholder.className = "suggested-placeholder";
-        sidebar.appendChild(placeholder);
-    }
+        item.onclick = () => window.location.href = game.url;
+        container.appendChild(item);
+    });
 }
 
-loadGames();
