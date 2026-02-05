@@ -111,3 +111,9 @@ h1, h2 {
   transform: rotate(-15deg); /* Angle the ribbon */
   z-index: 1; /* Ensure it appears above the button */
 }
+.button span {
+  display: block;
+  text-align: center;
+  margin-top: 8px; /* space between image and text */
+  width: 100%;
+}
