@@ -59,18 +59,46 @@ h1, h2 {
   align-items: center;
   justify-content: center;
   margin: 10px;
-  padding: 15px 20px; /* Enlarge the padding */
-  background-color: #21b3d8; /* Darker gray button color */
+  padding: 18px 24px;
+
+  /* Fancy vertical gradient */
+  background: linear-gradient(
+    to bottom,
+    #4fd3f3 0%,   /* bright aqua highlight */
+    #21b3d8 40%,  /* your original color */
+    #178fb0 100%  /* deeper bottom shade */
+  );
+
   color: white;
   text-align: center;
   text-decoration: none;
   border: none;
-  border-radius: 5px;
+  border-radius: 10px;
+
+  /* Soft shadow + smooth transitions */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.18);
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: 
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.3s ease;
   max-width: 200px;
-  width: 100%; /* Make button width 100% */
+  width: 100%;
 }
+
+.button:hover {
+  /* Slightly brighter gradient on hover */
+  background: linear-gradient(
+    to bottom,
+    #66e0ff 0%,
+    #2cc7ec 40%,
+    #1a9cc0 100%
+  );
+
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.25);
+}
+
 
 .button:hover {
   background-color: #116874; /* Even darker gray on hover */
